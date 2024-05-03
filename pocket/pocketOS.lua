@@ -1,21 +1,23 @@
 --[[HUD-OS by FireIP
-	Version 0.4
+	Version 0.1
 	Changes:
-		code cleanup]]
+		init]]
 
 
 term.clear()
 term.setCursorPos(1,1)
-print("HUD-OS(v0.4)")
+print("HUD-OS(v0.1)")
 
-print("Startup [1/1]")
+print("Startup [0/1]")
 
 --Functions
 
 function connect()
 	print("Pinging...")
 	ping = true
-
+ 
+ --TODO: Encryption and Identifiacation
+ 
 	local timeout = os.startTimer(1)
 	while ping do
 		a.transmit(20,recC,"ping")
@@ -38,9 +40,7 @@ function connect()
 		elseif pEvent[1] == "timer" and pEvent[2] == timeout then
 			timeout = os.startTimer(1)
 		end
-
 	end
-
 end
 
 function recieveData()
