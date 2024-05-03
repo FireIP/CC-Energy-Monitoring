@@ -1,0 +1,25 @@
+print("Neural-OS(v1.0)")
+print("Startup...")
+
+shell.openTab("HUD/HUD-OS")
+Fly = shell.openTab("HUD/Fly")
+shell.openTab("HUD/auto-feeder")
+
+shell.switchTab(Fly)
+
+local modules = peripheral.find("neuralInterface")
+if not modules then
+	error("Must have a neural interface", 0)
+end
+
+if not modules.hasModule("plethora:sensor") then
+	print("Must have a sensor for Fly and Auto-Feeder")
+end
+if not modules.hasModule("plethora:introspection") then
+	print("Must have an introspection module for Fly and Auto-Feeder")
+end
+if not modules.hasModule("plethora:kinetic", 0) then
+	print("Must have a kinetic agument for Fly")
+end
+
+print("Done")

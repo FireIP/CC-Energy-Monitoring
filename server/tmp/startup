@@ -1,0 +1,9 @@
+print("Startup...")
+
+shell.openTab("HUD-OS(v0.3)")
+fly = shell.openTab("Fly(v0.4)")
+shell.openTab("auto-feeder.lua")
+
+shell.switchTab(fly)
+
+print("Done")

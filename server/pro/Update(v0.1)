@@ -1,0 +1,21 @@
+print("Ready...")
+
+d = peripheral.find("drive")
+
+while true do
+    if d.isDiskPresent() and d.hasData() do
+        p = d.getMountPath()
+        l = fs.list(p)
+        m = table.maxn
+        
+        for z = 1,m do
+            if l[z] == "HUD-OS" do
+                fs.delete(p .. "HUD-OS")
+            end
+            if l[z] == "startup" do
+                fs.delete(p .. "startup")
+            end
+        end
+
+        fs.copy("Programm-Data/HUD-OS", p)
+        fs.copy("Programm-Data/startup", p)

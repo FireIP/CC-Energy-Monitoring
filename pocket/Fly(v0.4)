@@ -1,0 +1,73 @@
+local modules = peripheral.find("neuralInterface")
+if not modules then
+	error("Must have a neural interface", 0)
+end
+
+if not modules.hasModule("plethora:sensor") then error("Must have a sensor", 0) end
+--if not modules.hasModule("plethora:scanner") then error("Must have a scanner", 0) end
+if not modules.hasModule("plethora:introspection") then error("Must have an introspection module", 0) end
+if not modules.hasModule("plethora:kinetic", 0) then error("Must have a kinetic agument", 0) end
+
+local meta = {}
+local hover = false
+local down = false
+local sh = 1.1261
+
+parallel.waitForAny(
+	function()
+		while true do
+			local event, key = os.pullEvent()
+			if event == "key" and key == keys.o then
+				-- The O key launches you high into the air.
+				modules.launch(0, -90, 3)
+			elseif event == "key" and key == keys.x then
+				-- The P key launches you a little into the air.
+				modules.launch(0, -90, 1)
+			elseif event == "key" and key == keys.v then
+				-- The v key launches you in whatever direction you are looking.
+				modules.launch(meta.yaw, meta.pitch, 3)
+			elseif event == "key" and key == keys.leftCtrl then
+				-- Holding the K key enables "hover" mode. We disable it when it is released.
+				if not hover then
+					hover = true
+					os.queueEvent("hover")
+				end
+			elseif event == "key_up" and key == keys.leftCtrl then
+				hover = false
+			elseif event == "key" and key == keys.leftShift then
+				if not down then
+					down = true
+					sh = 2
+				end
+			elseif event == "key_up" and key == keys.leftShift then
+				down = false
+				sh = 1.1261
+			end
+		end
+	end,
+	function()
+		while true do
+			meta = modules.getMetaOwner()
+		end
+	end,
+	function()
+		while true do
+			if hover then
+				-- We calculate the required motion we need to take
+				local mY = meta.motionY
+				mY = (mY - 0.138) / sh
+
+				-- If it is sufficiently large then we fire ourselves in that direction.
+				if mY > 0.5 or mY < 0 then
+					local sign = 1
+					if mY < 0 then sign = -1 end
+					modules.launch(0, 90 * sign, math.min(4, math.abs(mY)))
+				else
+					sleep(0)
+				end
+			else
+				os.pullEvent("hover")
+			end
+		end
+	end
+)
