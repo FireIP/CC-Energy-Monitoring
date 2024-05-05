@@ -9,7 +9,7 @@
 	
 	term.clear()
 	term.setCursorPos(1,1)
-	print("sendData (v0.2)")
+	print("sendData (v0.3)")
 	print("Sending data on port: " .. ch)
 	
 	--Functions

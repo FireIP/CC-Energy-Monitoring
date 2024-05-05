@@ -6,7 +6,7 @@
 
 term.clear()
 term.setCursorPos(1,1)
-print("Server-OS (v0.3.1)")
+print("Server-OS (v0.3.2)")
 
 print("Startup [1/3]")
 print("Initialising [...]")

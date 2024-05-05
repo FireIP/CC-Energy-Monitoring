@@ -26,7 +26,7 @@ function connect()
 		if pEvent[1] == "modem_message" then
 	
 			if pEvent[5] == "listening" then
-				print("Recieved answer!")
+				--print("Recieved answer!")
 	
 				a.transmit(20,recC,"copy")
 				rec = true
