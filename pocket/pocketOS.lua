@@ -1,4 +1,4 @@
---[[HUD-OS by FireIP
+--[[Pocket-OS by FireIP
 	Version 0.1
 	Changes:
 		init]]
@@ -6,9 +6,9 @@
 
 term.clear()
 term.setCursorPos(1,1)
-print("HUD-OS(v0.1)")
+print("Pocket-OS(v0.1)")
 
-print("Startup [0/1]")
+print("Startup [0/2]")
 
 --Functions
 
@@ -75,18 +75,15 @@ function recieveData()
 	end
 end
 
+term.getCursorPos(1,2)
+term.clearLine()
+print("Startup [1/2]")
+
 --Programm stuff
 
 rec = false
 recC = 22
 
-mod = peripheral.find("neuralInterface")
-if not mod then
-	error("Not on neural interface.",0)
-end
-
-can = mod.canvas()
-can.clear()
 headl = can.addText({4,3},"Energy:",-1,0.6)
 metx = can.addText({4,9},"connecting...",-1,0.55)
 rtx = can.addText({4,15},"loading...",-1,0.55)
@@ -96,6 +93,11 @@ if not a then
 	error("Wireless modem not found.",0)
 end
 a.open(recC)
+
+term.getCursorPos(1,2)
+term.clearLine()
+print("Startup [2/2]")
+sleep(0.25)
 
 term.getCursorPos(1,2)
 term.clearLine()
