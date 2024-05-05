@@ -1,12 +1,12 @@
 --[[Pocket-OS by FireIP
-	Version 0.1
+	Version 0.2
 	Changes:
-		init]]
+		handel nil data]]
 
 
 term.clear()
 term.setCursorPos(1,1)
-print("Pocket-OS(v0.1)")
+print("Pocket-OS(v0.2)")
 
 print("Startup [0/2]")
 

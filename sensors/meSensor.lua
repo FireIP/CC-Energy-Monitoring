@@ -1,6 +1,8 @@
-function getData()
-    me = peripheral.find("meBridge")
-    if not me then
+local meSensor = {}
+
+function meSensor.getData()
+    m = peripheral.find("meBridge")
+    if not m then
 	    error("ME Bridge not found.",0)
     end
     
@@ -22,3 +24,5 @@ function getData()
     
     return md
 end
+
+return meSensor
