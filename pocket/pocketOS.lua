@@ -58,9 +58,9 @@ function recieveData()
 				bstr = "ME-System: " .. D.ME.mev .. " AE" .. " (" .. D.ME.mepv .. "%)" .. " (" .. D.ME.mtlmmv .. "m " .. D.ME.mtlmsv .. "s)"
 				
 				if D.ME.mep <= 75 then
-					term.setColor(colors.red)
+					term.setTextColour(colors.red)
 				else
-					term.setColor(colors.white)
+					term.setTextColour(colors.white)
 				end
 				term.getCursorPos(1,2)
 				term.clearLine()
