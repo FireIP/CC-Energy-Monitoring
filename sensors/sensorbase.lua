@@ -29,11 +29,12 @@ function connect()
     
     --TODO: Encryption and Identifiacation
     
-    local timeout = os.startTimer(1)
+    local timeout = os.startTimer(10)
     while ping do
         sleep(backoff)
         a.transmit(servC, recC, "ping")
         pEvent = {os.pullEvent()}
+    
 
         if pEvent[1] == "modem_message" then
     
@@ -46,19 +47,16 @@ function connect()
 
                 rxTx()
             end
-
-            timeout = os.startTimer(1)
-            print("Wrong answer rec")
             
         elseif pEvent[1] == "timer" and pEvent[2] == timeout then
             print("Ping timedout")
-            timeout = os.startTimer(1)
+            timeout = os.startTimer(10)
         end
     end
 end
 
 function rxTx()
-    mess = {os.pullEvent()}
+    mess = os.pullEvent()
     if mess[1] == "modem_message" then
         if mess[5][1] == "sensConf" then
             print("Syncing...")
@@ -121,7 +119,7 @@ term.clearLine()
 print("Initialising [2/3]")
 
 while true do
-    rxTx()
+    connect()
     a.closeAll()
     a.open(recC)
 end

@@ -30,6 +30,10 @@ dataFilePath = "/pro/data.txt"
 function syncSensor(rc, newListen, newRc)
 	syncD = {"sensConf", backoff=(0.125*sensCount), servC=newListen, recC=newRc, numM=modCount}
 	a.transmit(rc, newListen ,syncD)
+	if not a.isOpen(newListen) then
+		a.open(newListen)
+	end
+	
 	sync = true
 	timeout = os.startTimer(5)
 	while sync do
@@ -88,7 +92,7 @@ function listen()
 				if event[3] == 20 then
 					shell.openTab("/pro/threads/sendData.lua", rc)
 				elseif event[3] == 18 then
-					handleNewSensor(rc)
+					handelNewSensor(rc)
 				else
 					if sensCount ~= 0 or sensCount >= 80 then
 						handelSensor(rc, event[3])
@@ -98,25 +102,6 @@ function listen()
 					end
 				end
 			end
-		end
-	end
-end
-
-function connect()
-	while listening do
-		print("Listening...")
-		event = {os.pullEvent("modem_message")}
-		if event[5] == "ping" then
-			print("Recived a ping!")
-
-			rc = event[4]
-			a.transmit(rc,20,"listening")
-			event = {os.pullEvent("modem_message")}
-			if event[5] == "copy" then
-				print("Connected!")
-				shell.openTab("/pro/threads/sendData.lua", rc)
-			end
-
 		end
 	end
 end
@@ -141,5 +126,5 @@ term.clearLine()
 print("Initialising [done]")
 
 while true do
-	connect()
+	l()
 end
