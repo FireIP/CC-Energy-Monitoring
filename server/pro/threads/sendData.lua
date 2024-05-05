@@ -17,27 +17,33 @@
 	function sendData(cha)
 		print("Sending data.")
 		while true do
-			-- Handling the ME-System
-			me = m.getEnergyStorage()
-			memax = m.getMaxEnergyStorage()
-			mev = math.modf(me)
-			mep = (me/memax)*100
-			mepv = math.modf(mep)
-	
-			mu = m.getEnergyUsage()
-			mtls = me/(mu*20)
-			mtlsv = math.modf(mtls)
-			mtlmm = mtls/60
-			mtlmmv = math.modf(mtlmm)
-			mtlms = math.fmod(mtls,60)
-			mtlmsv = math.modf(mtlms)
-	
-			md = {me=me,mev=mev,mep=mep,mepv=mepv, mu=mu,mtls=mtls,mtlsv=mtlsv,mtlmm=mtlmm,mtlmmv=mtlmmv,mtlms=mtlms,mtlmsv=mtlmsv}
 			
-			D = {"data", ME=md}
+			D = getData()
 	
 			a.transmit(cha,20,D)
 		end
+	end
+
+	function getData()
+		-- Handling the ME-System
+		me = m.getEnergyStorage()
+		memax = m.getMaxEnergyStorage()
+		mev = math.modf(me)
+		mep = (me/memax)*100
+		mepv = math.modf(mep)
+
+		mu = m.getEnergyUsage()
+		mtls = me/(mu*20)
+		mtlsv = math.modf(mtls)
+		mtlmm = mtls/60
+		mtlmmv = math.modf(mtlmm)
+		mtlms = math.fmod(mtls,60)
+		mtlmsv = math.modf(mtlms)
+
+		md = {me=me,mev=mev,mep=mep,mepv=mepv, mu=mu,mtls=mtls,mtlsv=mtlsv,mtlmm=mtlmm,mtlmmv=mtlmmv,mtlms=mtlms,mtlmsv=mtlmsv}
+		
+		D = {"data", ME=md}
+		return D
 	end
 	
 	--Programm stuff

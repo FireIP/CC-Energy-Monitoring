@@ -30,6 +30,7 @@ function connect()
 	
 				a.transmit(20,recC,"copy")
 				rec = true
+				os.cancelTimer(timeout)
 
 				recieveData()
 			
