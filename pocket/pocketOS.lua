@@ -48,7 +48,7 @@ function recieveData()
 		mess = {os.pullEvent()}
 		if mess[1] == "modem_message" then
 			if mess[5][1] == "data" then
-				term.getCursorPos(1,2)
+				term.setCursorPos(1,2)
 				term.clearLine()
 				print("Running...")
 
@@ -62,7 +62,7 @@ function recieveData()
 				else
 					term.setTextColour(colors.white)
 				end
-				term.getCursorPos(1,2)
+				term.setCursorPos(1,2)
 				term.clearLine()
 				print(bstr)
 			end
@@ -70,7 +70,7 @@ function recieveData()
 	end
 end
 
-term.getCursorPos(1,2)
+term.setCursorPos(1,2)
 term.clearLine()
 print("Startup [1/2]")
 
@@ -85,12 +85,12 @@ if not a then
 end
 a.open(recC)
 
-term.getCursorPos(1,2)
+term.setCursorPos(1,2)
 term.clearLine()
 print("Startup [2/2]")
 sleep(0.25)
 
-term.getCursorPos(1,2)
+term.setCursorPos(1,2)
 term.clearLine()
 print("connecting...")
 
