@@ -1,11 +1,13 @@
 --[[Server-OS/sendData by FireIP
-	Version 0.3
-	for Server-OS(v0.3.2)
+	Version 0.4
+	for Server-OS(v0.4)
 	Changes: temp removed reactor
 	]]
 
 	args = ...
 	ch = tonumber(args)
+
+	dataFilePath = "/pro/data.txt"
 	
 	term.clear()
 	term.setCursorPos(1,1)
@@ -25,24 +27,10 @@
 	end
 
 	function getData()
-		-- Handling the ME-System
-		me = m.getEnergyStorage()
-		memax = m.getMaxEnergyStorage()
-		mev = math.modf(me)
-		mep = (me/memax)*100
-		mepv = math.modf(mep)
-
-		mu = m.getEnergyUsage()
-		mtls = me/(mu*20)
-		mtlsv = math.modf(mtls)
-		mtlmm = mtls/60
-		mtlmmv = math.modf(mtlmm)
-		mtlms = math.fmod(mtls,60)
-		mtlmsv = math.modf(mtlms)
-
-		md = {me=me,mev=mev,mep=mep,mepv=mepv, mu=mu,mtls=mtls,mtlsv=mtlsv,mtlmm=mtlmm,mtlmmv=mtlmmv,mtlms=mtlms,mtlmsv=mtlmsv}
-		
-		D = {"data", ME=md}
+		data = textutils.unserialize(datFile.readAll())
+		md = data.ME
+		rf = data.R
+		D = {"data", ME=md, R=rd}
 		return D
 	end
 	
@@ -62,6 +50,8 @@
 		error("ME Bridge not found.",0)
 	end
 	
+	datFile = fs.open(dataFilePath, "r")
+
 	while true do
 		sendData(ch)
 	end

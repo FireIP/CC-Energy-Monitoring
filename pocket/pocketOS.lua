@@ -56,15 +56,36 @@ function recieveData()
 				--rec = false
 				-- Handling ME-Data
 				D = mess[5]
-				bstr = "ME-System: " .. D.ME.mev .. " AE" .. " (" .. D.ME.mepv .. "%)" .. " (" .. D.ME.mtlmmv .. "m " .. D.ME.mtlmsv .. "s)"
+
+				if D.ME then
+					bstr = "ME-System: " .. D.ME.mev .. " AE" .. " (" .. D.ME.mepv .. "%)" .. " (" .. D.ME.mtlmmv .. "m " .. D.ME.mtlmsv .. "s)"
 				
-				if D.ME.mep <= 75 then
-					term.setTextColour(colors.red)
+					if D.ME.mep <= 75 then
+						term.setTextColour(colors.red)
+					else
+						term.setTextColour(colors.white)
+					end
+					term.setCursorPos(1,2)
+					term.clearLine()
 				else
-					term.setTextColour(colors.white)
+					bstr = "ME-System: " .. n/a
 				end
-				term.setCursorPos(1,2)
-				term.clearLine()
+				print(bstr)
+				term.setTextColour(colors.white)
+
+				if D.R then
+					if D.R.ri then
+						rs = "active"
+					else
+						rs = "inactive"
+					end
+
+					bstr = "FR_1: " .. D.R.rev .. " EU/t" .. " (" .. rs .. ")" .. " (CH: " .. D.R.rchv .. " MK" .. " PH: " .. D.R.rphv .. " MK)"
+					term.setCursorPos(1,3)
+					term.clearLine()
+				else
+					bstr = "FR_1: " .. n/a
+				end
 				print(bstr)
 			end
 		end
