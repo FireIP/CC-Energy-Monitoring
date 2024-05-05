@@ -48,28 +48,23 @@ function recieveData()
 		mess = {os.pullEvent()}
 		if mess[1] == "modem_message" then
 			if mess[5][1] == "data" then
-				print("Recieving data!")
+				term.getCursorPos(1,2)
+				term.clearLine()
+				print("Running...")
 
 				--rec = false
 				-- Handling ME-Data
 				D = mess[5]
 				bstr = "ME-System: " .. D.ME.mev .. " AE" .. " (" .. D.ME.mepv .. "%)" .. " (" .. D.ME.mtlmmv .. "m " .. D.ME.mtlmsv .. "s)"
-				metx.setText(bstr)
+				
 				if D.ME.mep <= 75 then
-					metx.setColor(255,45,0)
+					term.setColor(colors.red)
 				else
-					metx.setColor(-1)
+					term.setColor(colors.white)
 				end
-
-				-- Handling Reactor Data
-				if D.R.ri then
-					rs = "active"
-				else
-					rs = "inactive"
-				end
-
-				bstr = "FR_1: " .. D.R.rev .. " EU/t" .. " (" .. rs .. ")" .. " (CH: " .. D.R.rchv .. " MK" .. " PH: " .. D.R.rphv .. " MK)"
-				rtx.setText(bstr)
+				term.getCursorPos(1,2)
+				term.clearLine()
+				print(bstr)
 			end
 		end
 	end
@@ -84,10 +79,6 @@ print("Startup [1/2]")
 rec = false
 recC = 22
 
-headl = can.addText({4,3},"Energy:",-1,0.6)
-metx = can.addText({4,9},"connecting...",-1,0.55)
-rtx = can.addText({4,15},"loading...",-1,0.55)
-
 a = peripheral.find("modem")
 if not a then
 	error("Wireless modem not found.",0)
@@ -101,7 +92,7 @@ sleep(0.25)
 
 term.getCursorPos(1,2)
 term.clearLine()
-print("Running...")
+print("connecting...")
 
 while true do
 	connect()
