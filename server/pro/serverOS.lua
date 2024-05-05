@@ -25,7 +25,7 @@ function connect()
 			event = {os.pullEvent("modem_message")}
 			if event[5] == "copy" then
 				print("Connected!")
-				shell.openTab("pro/threads/sendData(v0.2)", rc)
+				shell.openTab("pro/threads/sendData.lua", rc)
 			end
 
 		end

@@ -32,27 +32,8 @@
 			mtlmsv = math.modf(mtlms)
 	
 			md = {me=me,mev=mev,mep=mep,mepv=mepv, mu=mu,mtls=mtls,mtlsv=mtlsv,mtlmm=mtlmm,mtlmmv=mtlmmv,mtlms=mtlms,mtlmsv=mtlmsv}
-
-			-- Handling the Reactor
-			re = l.getProducing()
-			rev = math.modf(re)
-			-- rep = (re/1000000000)
-			-- repv = math.modf(rep)
-
-			rch = l.getCaseHeat()/1000000 -- in MK
-			rchv = math.modf(rch)
-			rph = l.getPlasmaHeat()/1000000 -- in MK
-			rphv = math.modf(rph)
-
-
-			ri = l.isIgnited()
-
-
-			rd = {re=re,rev=rev, rch=rch,rchv=rchv,rph=rph,rphv=rphv, ri=ri}
-
-
 			
-			D = {"data", ME=md, R=rd}
+			D = {"data", ME=md}
 	
 			a.transmit(cha,20,D)
 		end
@@ -72,11 +53,6 @@
 	m = peripheral.find("meBridge")
 	if not m then
 		error("ME Bridge not found.",0)
-	end
-	
-	l = peripheral.find("Reactor Logic Adapter")
-	if not l then
-		error("Reactor Logic Adapter not found.",0)
 	end
 	
 	while true do
