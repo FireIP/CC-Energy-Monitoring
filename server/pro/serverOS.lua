@@ -33,7 +33,7 @@ function syncSensor(rc, newListen, newRc)
 	if not a.isOpen(newListen) then
 		a.open(newListen)
 	end
-	
+
 	sync = true
 	timeout = os.startTimer(5)
 	while sync do
@@ -72,9 +72,11 @@ function handelSensor(rc, inCh)
 		sensCount = 0
 	end
 end
-
+ 
 function handelNewSensor(rc)
-	syncSensor(rc, startActListSensCh + sensCount, startActRetSensCh + sensCount)
+	newListCh = startActListSensCh + sensCount
+	newRecCh = startActRetSensCh + sensCount
+	syncSensor(rc, newListCh, new)
 end
 
 function listen()
@@ -126,5 +128,5 @@ term.clearLine()
 print("Initialising [done]")
 
 while true do
-	l()
+	listen()
 end
