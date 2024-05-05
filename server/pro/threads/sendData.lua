@@ -18,12 +18,13 @@
 		print("Sending data.")
 		while true do
 			-- Handling the ME-System
-			me = m.getNetworkEnergyStored()
+			me = m.getEnergyStorage()
+			memax = m.getMaxEnergyStorage()
 			mev = math.modf(me)
-			mep = (me/1820000)*100
+			mep = (me/memax)*100
 			mepv = math.modf(mep)
 	
-			mu = m.getNetworkEnergyUsage()
+			mu = m.getEnergyUsage()
 			mtls = me/(mu*20)
 			mtlsv = math.modf(mtls)
 			mtlmm = mtls/60
