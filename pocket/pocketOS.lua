@@ -90,10 +90,6 @@ term.clearLine()
 print("Startup [2/2]")
 sleep(0.25)
 
-term.setCursorPos(1,2)
-term.clearLine()
-print("connecting...")
-
 while true do
 	connect()
 end
