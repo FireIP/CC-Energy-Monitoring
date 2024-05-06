@@ -11,7 +11,7 @@
 	
 	term.clear()
 	term.setCursorPos(1,1)
-	print("sendData (v0.3)")
+	print("sendData (v0.4)")
 	print("Sending data on port: " .. ch)
 	
 	--Functions
@@ -44,11 +44,6 @@
 	end
 	a.closeAll()
 	a.open(20)
-	
-	m = peripheral.find("meBridge")
-	if not m then
-		error("ME Bridge not found.",0)
-	end
 	
 	datFile = fs.open(dataFilePath, "r")
 
