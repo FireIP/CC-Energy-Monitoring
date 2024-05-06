@@ -23,6 +23,7 @@
 			D = getData()
 	
 			a.transmit(cha,20,D)
+			sleep(0.25)
 		end
 	end
 
