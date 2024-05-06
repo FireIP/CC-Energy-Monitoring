@@ -1,6 +1,6 @@
 --[[SensorBase by FireIP
-	Version 0.1
-	Changes: init
+	Version 0.2
+	Changes: add workig reactor
 	]]
 
 
@@ -90,7 +90,7 @@ function rxTx()
             end
 
             if modules[2] then
-                local reactorSensor require "/pro/sensor/modules/reacrorSensor.lua" 
+                local reactorSensor require "/pro/sensor/modules/reactorSensor" 
                 rd = reactorSensor.getData()
             else
                 rd = nil

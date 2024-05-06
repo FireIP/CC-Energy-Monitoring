@@ -1,4 +1,6 @@
-function getData()
+local reactorSensor = {}
+
+function reactorSensor.getData()
     r = peripheral.find("Reactor Logic Adapter")
 	if not r then
 		error("Reactor Logic Adapter not found.",0)
@@ -22,3 +24,5 @@ function getData()
     
     return md
 end
+
+return reactorSensor
