@@ -20,8 +20,14 @@ function meSensor.getData()
     mtlms = math.fmod(mtls,60)
     mtlmsv = math.modf(mtlms)
 
-    md = {me=me,mev=mev,mep=mep,mepv=mepv, mu=mu,mtls=mtls,mtlsv=mtlsv,mtlmm=mtlmm,mtlmmv=mtlmmv,mtlms=mtlms,mtlmsv=mtlmsv}
-    
+    mncel = #m.listCells()
+    mntype = #m.listItems()
+    mtyp = math.ceil(((mncel*63)/mntype)*1000)/10
+    mtis = m.getTotalItemStorage()
+    mnitm = m.getUsedItemStorage()
+    minp = math.ceil((mtis/mnitm)*1000)/10
+
+    md = {me=me,mev=mev,mep=mep,mepv=mepv, mu=mu,mtls=mtls,mtlsv=mtlsv,mtlmm=mtlmm,mtlmmv=mtlmmv,mtlms=mtlms,mtlmsv=mtlmsv, mncel=mncel,mntype=mntype,mtyp=mtyp,mtis=mtis,mnitm=mnitm,minp=minp}
     return md
 end
 

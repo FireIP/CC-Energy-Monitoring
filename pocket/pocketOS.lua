@@ -1,12 +1,12 @@
 --[[Pocket-OS by FireIP
-	Version 0.2
+	Version 0.2.1
 	Changes:
-		handel nil data]]
+		handel additional me data]]
 
 
 term.clear()
 term.setCursorPos(1,1)
-print("Pocket-OS(v0.2)")
+print("Pocket-OS(v0.2.1)")
 
 print("Startup [0/2]")
 
@@ -58,18 +58,21 @@ function recieveData()
 				D = mess[5]
 
 				if D.ME then
-					bstr = "ME-System: " .. D.ME.mev .. " AE" .. " (" .. D.ME.mepv .. "%)" .. " (" .. D.ME.mtlmmv .. "m " .. D.ME.mtlmsv .. "s)"
-				
+					bstra = "ME-System: " .. D.ME.mev .. " AE" .. " (" .. D.ME.mepv .. "%)" .. " (" .. D.ME.mtlmmv .. "m " .. D.ME.mtlmsv .. "s)"
+					bstrb = "/t" .. "Types: " .. D.ME.mtyp .. "% Total: " .. D.ME.minp .. "%"
+					bstr = bstra .. "/n" .. bstrb
 					if D.ME.mep <= 75 then
 						term.setTextColour(colors.red)
 					else
 						term.setTextColour(colors.white)
 					end
-					term.setCursorPos(1,2)
-					term.clearLine()
 				else
 					bstr = "ME-System: " .. n/a
 				end
+				term.setCursorPos(1,3)
+				term.clearLine()
+				term.setCursorPos(1,2)
+				term.clearLine()
 				print(bstr)
 				term.setTextColour(colors.white)
 
