@@ -5,6 +5,13 @@ local function packet(t, s, a, d)
 	return p
 end
 
+function fcp.bind(localCh, a, timeout, n)
+	local self = {}
+	self.localCH = localCh
+
+
+	
+end
 function fcp.open(localCh, remoteCh, a, timeout, n)
 	local self = {}
 
