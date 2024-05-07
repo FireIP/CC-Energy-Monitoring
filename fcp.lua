@@ -40,9 +40,43 @@ function fcp.open(localCh, remoteCh, a, timeout, n)
 	end
 	
 
-	function self.write(s)
+	function self.write(s, timeout)
 		a.transmit(self.remoteCh, self.localCh, packet(t="DAT", self.myAktSeq))
 		self.myAktSeq = self.myAktSeq + 1
+
+		if timeout > 0 then
+			sefl.timer = os.startTimer(timeout)
+		end
+		self.event = {os.pullEvent()}
+		if self.event[1] == "modem_message" and self.event[3] == self.localCH and self.event[5].type == "ACK" && self.event[5].ack = self.myAktSeq  then
+			os.cancelTimer(self.timer)
+			self.remAktSeq = event[5].seq + 1
+			return true
+		elseif event[1] == "modem_message" then
+			self.event2 = {os.pullEvent()}
+			if self.event2[1] == "modem_message" and self.event2[3] == self.localCH and self.event2[5].type == "ACK" && self.event2[5].ack = self.myAktSeq  then
+				os.cancelTimer(self.timer)
+				self.remAktSeq = event[5].seq + 1
+				return true
+			elseif self.event2[1] == "modem_message" then
+				os.cancelTimer(self.timer)
+				os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+				os.queueEvent(self.event2[1], self.event2[2], self.event2[3], self.event2[4], self.event2[5], self.event2[6])
+				return false
+			elseif self.event2[1] == "timer" then
+				os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+				return false
+			end
+			os.cancelTimer(self.timer)
+			os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+			os.queueEvent(self.event2[1], self.event2[2], self.event2[3], self.event2[4], self.event2[5], self.event2[6])
+
+		elseif event[1] == "timer" then
+			return false
+		end
+		os.cancelTimer(self.timer)
+		os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+		return false
 	end
 
 	function self.read(timeout)
@@ -50,7 +84,7 @@ function fcp.open(localCh, remoteCh, a, timeout, n)
 			self.timer = os.startTimer(timeout)
 		end
 		self.event = {os.pullEvent()}
-		if event[1] == "modem_message" and event[3] == self.localCH and event[5].type == "DAT" then
+		if self.event[1] == "modem_message" and self.event[3] == self.localCH and self.event[5].type == "DAT" then
 			os.cancelTimer(self.timer)
 			self.remAktSeq = event[5].seq + 1
 			a.transmit(self.remoteCh, self.localCH, packet("ACK", self.myAktSeq, self.remAktSeq))
@@ -58,15 +92,51 @@ function fcp.open(localCh, remoteCh, a, timeout, n)
 			return event[5].dat
 
 		elseif event[1] == "modem_message" then
-			os.queueEvent(event[1], event[2], event[3], event[4], event[5], event[6])
-			--TODO: Provide event safe fsleep(t)
+			self.event2 = {os.pullEvent()}
+			if self.event2[1] == "modem_message" and self.event2[3] == self.localCH and self.event[5].type == "DAT" then
+				os.cancelTimer(self.timer)
+				self.remAktSeq = event[5].seq + 1
+				a.transmit(self.remoteCh, self.localCH, packet("ACK", self.myAktSeq, self.remAktSeq))
+				self.myAktSeq = self.myAktSeq + 1
+				return event[5].dat
+			elseif self.event2[1] == "modem_message" then
+				os.cancelTimer(self.timer)
+				os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+				os.queueEvent(self.event2[1], self.event2[2], self.event2[3], self.event2[4], self.event2[5], self.event2[6])
+				return nil
+			elseif self.event2[1] == "timer" then
+				os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+				return nil
+			end
+			os.cancelTimer(self.timer)
+			os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+			os.queueEvent(self.event2[1], self.event2[2], self.event2[3], self.event2[4], self.event2[5], self.event2[6])
 			return nil
-		elseif event[1] == "timer" then
+		elseif self.event[1] == "timer" then
 			return nil
 		end
+		os.cancelTimer(self.timer)
+		os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+		return nil
 	end
 
 	return self
+end
+
+local function doSleep()
+	os.pullEvent("timer")
+end
+local function handleEvent()
+	while true do
+		event = {os.pullEvent("modem_message")}
+		os.queueEvent(event[1], event[2], event[3], event[4], event[5], event[6])
+	end
+end
+local function fcp.fsleep(s) --does not consume modem events
+	for i, (s*10), 1 do
+		os.startTimer(0.1)
+		parallel.waitForAny(doSleep, handleEvent)
+	end
 end
 
 return fcp
