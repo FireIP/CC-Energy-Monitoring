@@ -16,7 +16,11 @@ function fcp.bind(localCh, a, timeout, n)
 	function self.listen(timeout)
 		self.timer = os.startTimer(timeout)
 		self.event = {os.pullEvent()}
-		if event brace
+		if event[1] == "modem_message" && event[5].type == "SYN" then
+			self.remAktSeq = event[5].seq + 1
+			a.transmit(self.remoteCh, self.localCH, packet("SYN-ACK", self.remAktSeq, self.myAktSeq))
+			
+		end
 	end
 
 	return self
