@@ -7,16 +7,29 @@ end
 
 function fcp.bind(localCh, a, timeout, n)
 	local self = {}
+
 	self.localCH = localCh
+	self.myAktSeq = math.random(0, 255)
 
+	a.open(self.localCH)
 
-	
+	function self.listen(timeout)
+		self.timer = os.startTimer(timeout)
+		self.event = {os.pullEvent()}
+		if event brace
+	end
+
+	return self
 end
+
 function fcp.open(localCh, remoteCh, a, timeout, n)
 	local self = {}
 
 	self.localCH = localCh
 	self.remoteCh = remoteCh
+
+	a.open(self.localCH)
+
 
 	self.myAktSeq = math.random(0, 255)
 	a.transmit(self.remoteCh, self.localCh, packet("SYN", self.myAktSeq))
@@ -33,7 +46,6 @@ function fcp.open(localCh, remoteCh, a, timeout, n)
 			os.cancelTimer(self.timer)
 			self.remAktSeq = event[5].seq +1
 			
-			a.open(self.localCH)
 			a.transmit(self.remoteCh, self.localCH, packet("ACK", self.myAktSeq, self.remAktSeq))
 			self.myAktSeq = self.myAktSeq + 1
 			--ESTABLISHED--
