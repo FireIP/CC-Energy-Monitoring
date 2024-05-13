@@ -8,6 +8,7 @@ end
 function fcp.bind(localCh, a, timeout, n)
 	local self = {}
 
+	self.connected = false
 	self.localCH = localCh
 	self.myAktSeq = math.random(0, 255)
 
@@ -18,11 +19,25 @@ function fcp.bind(localCh, a, timeout, n)
 			self.timer = os.startTimer(timeout)
 		end
 		self.event = {os.pullEvent()}
-		if event[1] == "modem_message" and event[3] == self.localCH and event[5].type == "SYN" then
+		if self.event[1] == "modem_message" and self.event[3] == self.localCH and event[5].type == "SYN" then
 			self.remAktSeq = event[5].seq + 1
 			a.transmit(self.remoteCh, self.localCH, packet("SYN-ACK", self.remAktSeq, self.myAktSeq))
 			self.myAktSeq = self.myAktSeq + 1
 
+			self.event = {os.pullEvent()}
+			if self.event[1] == "modem_message" and self.event[3] == self.localCH and self.event[5].type == "ACK" and self.event[5].ack == self.myAktSeq then
+				self.connected = true
+				return true
+			elseif self.event[1] == "modem_message" then
+				self.event2 = {os.pullEvent()}
+				if self.event2[1] == "modem_message" and self.event2[3] == self.localCH and self.event2[5].type == "ACK" and self.event2[5].ack == self.myAktSeq then
+					self.connected = true
+					return true
+				elseif self.event2[1] == "modem_message" then
+					os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+					
+				end
+			end
 		end
 	end
 
@@ -31,6 +46,8 @@ end
 
 function fcp.open(localCh, remoteCh, a, timeout, n)
 	local self = {}
+
+	self.connected = false
 
 	self.localCH = localCh
 	self.remoteCh = remoteCh
@@ -56,6 +73,7 @@ function fcp.open(localCh, remoteCh, a, timeout, n)
 			a.transmit(self.remoteCh, self.localCH, packet("ACK", self.myAktSeq, self.remAktSeq))
 			self.myAktSeq = self.myAktSeq + 1
 			--ESTABLISHED--
+			self.connected = true
 
 		elseif event[1] == "timer" then
 			self.try = self.try + 1
