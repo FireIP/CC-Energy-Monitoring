@@ -5,6 +5,10 @@ local function packet(t, s, a, d)
 	return p
 end
 
+local function requeueEvent(event)
+	os.queueEvent(event[1], event[2], event[3], event[4], event[5], event[6])
+end
+
 function fcp.bind(localCh, a, timeout, n)
 	local self = {}
 
@@ -34,7 +38,10 @@ function fcp.bind(localCh, a, timeout, n)
 					self.connected = true
 					return true
 				elseif self.event2[1] == "modem_message" then
-					os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+					os.cancelTimer(self.timer)
+					requeueEvent(self.event)
+					requeueEvent(self.event2)
+					return false
 					
 				end
 			end
@@ -104,22 +111,23 @@ function fcp.open(localCh, remoteCh, a, timeout, n)
 				return true
 			elseif self.event2[1] == "modem_message" then
 				os.cancelTimer(self.timer)
-				os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
-				os.queueEvent(self.event2[1], self.event2[2], self.event2[3], self.event2[4], self.event2[5], self.event2[6])
+				requeueEvent(self.event)
+				requeueEvent(self.event2)
 				return false
 			elseif self.event2[1] == "timer" then
-				os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+				requeueEvent(self.event)
 				return false
 			end
 			os.cancelTimer(self.timer)
-			os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
-			os.queueEvent(self.event2[1], self.event2[2], self.event2[3], self.event2[4], self.event2[5], self.event2[6])
+			requeueEvent(self.event)
+			requeueEvent(self.event2)
+			return false
 
 		elseif event[1] == "timer" then
 			return false
 		end
 		os.cancelTimer(self.timer)
-		os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+		requeueEvent(self.event)
 		return false
 	end
 
@@ -162,6 +170,11 @@ function fcp.open(localCh, remoteCh, a, timeout, n)
 		os.cancelTimer(self.timer)
 		os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
 		return nil
+	end
+
+	function close()
+		a.transmit(self.remoteCh, self.localCH, packet("FIN", self.myAktSeq))
+		self.myAktSeq = self.myAktSeq + 1
 	end
 
 	return self
