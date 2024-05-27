@@ -4,6 +4,8 @@ function doCheck()
     turtle.forward()
     doRow()
     turtle.turnLeft()
+    turtle.forward()
+    turtle.turnLeft()
     doRow()
     turtle.turnLeft()
     turtle.forward()
@@ -31,7 +33,8 @@ end
 function dropStar()
     for i = 9, 15, 1 do
         if turtle.getItemCount(i) > 0 then
-            turtle.dropDown(i, 1)
+            turtle.select(i)
+            turtle.dropDown(1)
             return true
         end
     end
@@ -55,12 +58,12 @@ function doRow()
             end
         else
             dropStar()
-            return false
         end
         if i ~= 3 then
             turtle.forward()
         end
     end
+    return true
 end
 
 function doRefuel()
@@ -81,4 +84,9 @@ function park()
     select(16)
 end
 
-doCheck()
+while true do
+    if ~doCheck() then
+        return
+    end
+    sleep(60)
+end
