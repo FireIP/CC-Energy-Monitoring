@@ -92,7 +92,7 @@ function fcp.open(localCh, remoteCh, a, timeout, n)
 	
 
 	function self.write(s, timeout)
-		a.transmit(self.remoteCh, self.localCh, packet(t="DAT", self.myAktSeq))
+		a.transmit(self.remoteCh, self.localCh, packet("DAT", self.myAktSeq))
 		self.myAktSeq = self.myAktSeq + 1
 
 		if timeout > 0 then
@@ -153,22 +153,22 @@ function fcp.open(localCh, remoteCh, a, timeout, n)
 				return event[5].dat
 			elseif self.event2[1] == "modem_message" then
 				os.cancelTimer(self.timer)
-				os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
-				os.queueEvent(self.event2[1], self.event2[2], self.event2[3], self.event2[4], self.event2[5], self.event2[6])
+				requeueEvent(self.event)
+				requeueEvent(self.event2)
 				return nil
 			elseif self.event2[1] == "timer" then
-				os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+				requeueEvent(self.event)
 				return nil
 			end
 			os.cancelTimer(self.timer)
-			os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
-			os.queueEvent(self.event2[1], self.event2[2], self.event2[3], self.event2[4], self.event2[5], self.event2[6])
+			requeueEvent(self.event)
+			requeueEvent(self.event2)
 			return nil
 		elseif self.event[1] == "timer" then
 			return nil
 		end
 		os.cancelTimer(self.timer)
-		os.queueEvent(self.event[1], self.event[2], self.event[3], self.event[4], self.event[5], self.event[6])
+		requeueEvent(self.event)
 		return nil
 	end
 
@@ -185,8 +185,8 @@ local function doSleep()
 end
 local function handleEvent()
 	while true do
-		event = {os.pullEvent("modem_message")}
-		os.queueEvent(event[1], event[2], event[3], event[4], event[5], event[6])
+		local event = {os.pullEvent("modem_message")}
+		requeueEvent(event)
 	end
 end
 function fcp.fsleep(s) --does not consume modem events
