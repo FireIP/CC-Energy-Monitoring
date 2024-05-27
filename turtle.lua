@@ -1,4 +1,4 @@
-local function doCheck()
+function doCheck()
     turtle.up()
     turtle.turnRight()
     turtle.forward()
@@ -14,11 +14,11 @@ local function doCheck()
     park()
 end
 
-local function abort()
+function abort()
     park()
 end
 
-local function storeStar()
+function storeStar()
     for i = 9, 15, 1 do
         if turtle.getItemSpace(i) >= turtle.getItemCount(16) then
             turtle.transferTo(i)
@@ -28,7 +28,7 @@ local function storeStar()
     return false
 end
 
-local function dropStar()
+function dropStar()
     for i = 9, 15, 1 do
         if turtle.getItemCount(i) > 0 then
             turtle.dropDown(i, 1)
@@ -38,7 +38,7 @@ local function dropStar()
     return false
 end
 
-local function doRow()
+function doRow()
     for i = 1, 3, 1 do
         turtle.select(16)
         turtle.suckDown()
@@ -63,7 +63,7 @@ local function doRow()
     end
 end
 
-local function doRefuel()
+function doRefuel()
     for i = 1, 8, 1 do
         if turtle.getItemCount(i) > 0 then
             turtle.select(i)
@@ -74,7 +74,7 @@ local function doRefuel()
     return false
 end
 
-local function park()
+function park()
     if turtle.getFuelLevel() < turtle.getFuelLimit() - 1000 then
         doRefuel()
     end
