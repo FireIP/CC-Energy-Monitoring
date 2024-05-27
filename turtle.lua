@@ -85,7 +85,7 @@ function park()
 end
 
 while true do
-    if ~doCheck() then
+    if not doCheck() then
         return
     end
     sleep(60)
